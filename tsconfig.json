@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "lib": [
+      "es7",
+      "dom",
+      "es2017.object"
+    ],
+    "baseUrl": "./src",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "newLine": "LF",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/__tests__/*", "**/__mocks__/*"]
+}
