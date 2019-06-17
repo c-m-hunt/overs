@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
 import fs from 'fs'
-import { matchesLocation, outputLocation } from './consts'
+import { matchesLocation, outputLocation, oversLocation } from './consts'
 import { getMatchId } from './data'
 import logger from './logger'
 import { processMatch } from './ops'
@@ -70,6 +70,8 @@ export const runOversChecker = async (
       oversProcessed[key] = overString
     }
   })
+
+  fs.writeFileSync(oversLocation, JSON.stringify(oversProcessed));
 
   const uniqueOvers: { [key: string]: number } = {}
   Object.values(oversProcessed).map((over: string) => {

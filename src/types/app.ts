@@ -4,4 +4,6 @@ export interface Ball {
   periodId: string
   over: string
   code: string
+  battingTeam: string
+  bowlingTeam: string
 }

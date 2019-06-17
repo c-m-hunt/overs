@@ -8,4 +8,4 @@ matches = matches
   .filter((match: string | null) => match !== null)
   .map((match: string) => parseInt(match, 10))
 
-runOversChecker(matches, true, false)
+runOversChecker(matches, false, false)

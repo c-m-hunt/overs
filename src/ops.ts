@@ -1,6 +1,6 @@
 import axios from 'axios'
 import fs from 'fs'
-import logger from 'logger'
+import logger from './logger'
 import path from 'path'
 import { cacheLocation } from './consts'
 import { Ball } from './types/app'
@@ -42,6 +42,8 @@ export const processCommentary = (
         matchId,
         over: item.over.actual ? item.over.actual.toString().split('.')[0] : '',
         periodId,
+        bowlingTeam: item.bowler.team.abbreviation,
+        battingTeam: item.batsman.team.abbreviation,
       }
     })
     .filter(ball => ball.over !== '')
