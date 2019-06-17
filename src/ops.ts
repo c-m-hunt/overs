@@ -4,7 +4,7 @@ import { CommentaryData } from './types/cricinfo';
 import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
-import { cacheLocation } from './index';
+import { cacheLocation } from './consts';
 
 export async function processMatch(id: string): Promise<Ball[]> {
   const periods = [1, 2];
@@ -88,56 +88,3 @@ async function getData(id: string, period: number, page: number): Promise<Commen
   }
   return data;
 }
-
-
-export const run = async (matches: number[], order: boolean = false, different: boolean = false) => {
-  let balls: any[] = [];
-  for (const matchId of matches) {
-    try {
-      let newBalls = await processMatch(matchId.toString());
-      balls = [ ...balls, ...newBalls ]
-    } catch (err) {
-      console.log(err);
-    }    
-  }
-  let overs: {[key: string]: string[]} = {};
-  balls.map(ball => {
-    const idx = `${ball.matchId}-${ball.periodId}-${ball.over}`;
-    if (overs[idx] === undefined) {
-      overs[idx] = [];
-    }
-    overs[idx].push(ball.code);
-  });
-  
-  let oversProcessed: {[key: string]: string} = {}
-  Object.keys(overs).map(key => {
-    const overString = order ? overs[key].join(' ') : overs[key].sort().join(' ');
-    if (different) {
-      if (overs[key].length === new Set(overs[key]).size) {
-        oversProcessed[key] = overString;
-      }
-    } else {
-      oversProcessed[key] = overString;
-    }
-  })
-
-  let uniqueOvers: {[key: string]: number} = {};
-  Object.values(oversProcessed).map((over: string) => {
-    if (uniqueOvers[over] === undefined) {
-      uniqueOvers[over] = 0;
-    }
-    uniqueOvers[over] ++;
-  })
-
-  let sortable: Array<[string, number]> =  Object.keys(uniqueOvers).map(key => {
-    return [key, uniqueOvers[key]];
-  })
-
-  sortable.sort(function(a, b) {
-    return b[1] - a[1];
-  });
-
-
-  const savePath = path.resolve(__dirname, './../data/output.json');
-  fs.writeFileSync(savePath, JSON.stringify(sortable));
-};
