@@ -2,9 +2,15 @@
 
 To check overs combinations from Cricinfo
 
-## To run
+## To get matches
+To create a `matches.json` file based on matches in  http://static.espncricinfo.com/db/STATS/ODIS/MISC/COMPLETE_LIST.html, run
+```
+yarn getMatches
+```
+The reason this step takes a long time is that the links in the above list go to a page without a match ID (e.g. http://static.espncricinfo.com/db/ARCHIVE/1970S/1970-71/ENG_IN_AUS/ENG_AUS_ODI_05JAN1971.html) which then gets `302` redirected to another page (e.g.http://www.espncricinfo.com/series/17265/scorecard/64148/australia-vs-england-only-odi-england-marylebone-cricket-club-tour-of-australia-1970-71)with the match ID so we need to follow that link to get the match ID.
 
-Create a file `./data/matches.json` with a stringified array of match IDs e.g.
+## To run
+A full run will use `./data/matches.json` which expects stringified array of match IDs e.g.
 ```
 [
   1144483,
@@ -33,7 +39,7 @@ Create a file `./data/matches.json` with a stringified array of match IDs e.g.
 ```
 
 Adjust the 2nd and 3rd paramters of the `runOversChecker` in `./src/index.ts`:
-* `order` (`true`) - if `true`, will order the balls in the over meaning. Used for looking for combinations of balls rather than precise over
+* `order` (`true`) - if `true`, will maintain the order the balls were bowled in. If `false`, will sort balls of over in order. Used for looking for combinations of balls rather than precise over
 * `different` (`false`) - if `true`, will only detect overs with different values for every ball. 
 
 Then `yarn run`.
