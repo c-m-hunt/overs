@@ -8,14 +8,10 @@ export const oversChecker = (order: boolean, different: boolean ) => {
   matches = matches
     .filter((match: string | null) => match !== null)
     .map((match: string) => parseInt(match, 10))
-  
+
   runOversChecker(matches, order, different)
 }
 
-// Gets matches
-// import { getMatches } from './entry'
-// getMatches();
-
 // Checks the overs against matches in matches.json
-oversChecker(true, true);
+oversChecker(false, true);
 

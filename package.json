@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
+    "getMatches": "ts-node src/getMatches.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
     "lint": "tslint 'src/**/*.ts'",
     "prettier": "prettier --check 'src/**/*.ts' --config '.prettierrc' --write"
