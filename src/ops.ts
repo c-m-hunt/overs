@@ -7,7 +7,7 @@ import { Ball } from './types/app'
 import { Commentary, Item } from './types/cricinfo'
 import { CommentaryData } from './types/cricinfo'
 
-export async function processMatch(id: string): Promise<Ball[]> {
+export const processMatch = async (id: string): Promise<Ball[]> {
   const periods = [1, 2]
   let balls: Ball[] = []
   for (const period of periods) {
@@ -29,6 +29,8 @@ export const processCommentary = (
   matchId: string,
   periodId: string
 ): Ball[] => {
+  let prevOver = 0;
+  let currentBall = 0;
   const balls: Ball[] = commentary.items
     .map(item => {
       if (!item.over.actual) {
@@ -36,17 +38,32 @@ export const processCommentary = (
           `Problem with match and period - no actual over returned: ${matchId}, ${periodId}`
         )
       }
+      const over = parseInt(item.over.actual ? item.over.actual.toString().split('.')[0] : '')
+      let ball;
+      if (over === prevOver) {
+        currentBall += 1;
+      } else {
+        currentBall = 0
+        prevOver = over
+      }
+      ball = currentBall
       return {
         ballId: item.over.unique.toString(),
         code: getCode(item),
         matchId,
-        over: item.over.actual ? item.over.actual.toString().split('.')[0] : '',
-        periodId,
+        over,
+        ball,
+        periodId: parseInt(periodId),
         bowlingTeam: item.bowler.team.abbreviation,
         battingTeam: item.batsman.team.abbreviation,
+        batsmanName: item.batsman.athlete.name,
+        bowlerName: item.bowler.athlete.name,
+        score: item.scoreValue,
+        playType: item.playType.description,
+        requiredRunRate: item.innings.requiredRunRate
       }
     })
-    .filter(ball => ball.over !== '')
+    //.filter(ball => ball.over !== '')
   return balls
 }
 

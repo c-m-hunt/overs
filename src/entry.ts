@@ -29,6 +29,12 @@ export const getMatches = async () => {
   }
 }
 
+export const requiredRunRateData = async (matchId: number) => {
+  let balls = await processMatch(matchId.toString());
+  balls = balls.filter(ball => ball.requiredRunRate !== undefined);
+  return balls;
+}
+
 export const runOversChecker = async (
   matches: number[],
   order: boolean = false,

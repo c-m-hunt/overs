@@ -14,7 +14,7 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts --inspect",
     "getMatches": "ts-node src/getMatches.ts",
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
     "lint": "tslint 'src/**/*.ts'",
