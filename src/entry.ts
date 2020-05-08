@@ -10,7 +10,7 @@ export const getMatches = async () => {
   const urlBase = 'http://static.espncricinfo.com'
   const listURL =
     'http://static.espncricinfo.com/db/STATS/ODIS/MISC/COMPLETE_LIST.html'
-  const listData = await axios.get(listURL).then(response => response.data)
+  const listData = await axios.get(listURL).then((response) => response.data)
   const $ = cheerio.load(listData)
   const matches: string[] = []
   $('pre a').each((_, elem) => {
@@ -30,9 +30,9 @@ export const getMatches = async () => {
 }
 
 export const requiredRunRateData = async (matchId: number) => {
-  let balls = await processMatch(matchId.toString());
-  balls = balls.filter(ball => ball.requiredRunRate !== undefined);
-  return balls;
+  let balls = await processMatch(matchId.toString())
+  balls = balls.filter((ball) => ball.requiredRunRate !== undefined)
+  return balls
 }
 
 export const runOversChecker = async (
@@ -55,7 +55,7 @@ export const runOversChecker = async (
     }
   }
   const overs: { [key: string]: string[] } = {}
-  balls.map(ball => {
+  balls.map((ball) => {
     const idx = `${ball.matchId}-${ball.periodId}-${ball.over}`
     if (overs[idx] === undefined) {
       overs[idx] = []
@@ -64,7 +64,7 @@ export const runOversChecker = async (
   })
 
   const oversProcessed: { [key: string]: string } = {}
-  Object.keys(overs).map(key => {
+  Object.keys(overs).map((key) => {
     const overString = order
       ? overs[key].join(' ')
       : overs[key].sort().join(' ')
@@ -77,7 +77,7 @@ export const runOversChecker = async (
     }
   })
 
-  fs.writeFileSync(oversLocation, JSON.stringify(oversProcessed));
+  fs.writeFileSync(oversLocation, JSON.stringify(oversProcessed))
 
   const uniqueOvers: { [key: string]: number } = {}
   Object.values(oversProcessed).map((over: string) => {
@@ -88,7 +88,7 @@ export const runOversChecker = async (
   })
 
   const sortable: Array<[string, number]> = Object.keys(uniqueOvers).map(
-    key => {
+    (key) => {
       return [key, uniqueOvers[key]]
     }
   )

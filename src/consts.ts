@@ -12,7 +12,7 @@ export const outputLocation: string = path.resolve(
 export const oversLocation: string = path.resolve(
   __dirname,
   './../data/overs.json'
-);
+)
 
 export const ballsLocation: string = path.resolve(
   __dirname,

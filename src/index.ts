@@ -1,10 +1,10 @@
 import fs from 'fs'
-import { matchesLocation } from './consts'
-import { runOversChecker, requiredRunRateData } from './entry'
-import { processMatch } from './ops'
 import { Ball } from 'types/app'
+import { matchesLocation } from './consts'
+import { requiredRunRateData, runOversChecker } from './entry'
+import { processMatch } from './ops'
 
-export const oversChecker = (order: boolean, different: boolean ) => {
+export const oversChecker = (order: boolean, different: boolean) => {
   let matches = JSON.parse(fs.readFileSync(matchesLocation, 'utf8'))
 
   matches = matches
@@ -18,46 +18,48 @@ export const oversChecker = (order: boolean, different: boolean ) => {
 // oversChecker(false, false);
 // @ts-ignore
 export const getSingleGameData = async () => {
-  let balls = await requiredRunRateData(1144530);
+  const balls = await requiredRunRateData(1144530)
   console.log(balls)
-  let str = '';
+  let str = ''
   balls.map((ball: Ball) => {
     // return [ball.ballId, parseFloat(ball.requiredRunRate)];
-    str += `${ball.ballId}, ${ball.requiredRunRate}\r\n`;
+    str += `${ball.ballId}, ${ball.requiredRunRate}\r\n`
   })
 
-  fs.writeFileSync('./data/rrr.csv', str);
-};
+  fs.writeFileSync('./data/rrr.csv', str)
+}
 
 export const getBatsmenBowlerBreakdown = async (matchId: string) => {
-  let balls = await processMatch(matchId);
+  let balls = await processMatch(matchId)
 
   balls = balls
-    .filter(b => b.battingTeam === 'ENG')
-    .filter(b => !b.code.endsWith('w'))
-    .filter(b => !b.code.endsWith('nb'))
+    .filter((b) => b.battingTeam === 'ENG')
+    .filter((b) => !b.code.endsWith('w'))
+    .filter((b) => !b.code.endsWith('nb'))
 
   const bats: any = {}
 
-  for (let ball of balls) {
+  for (const ball of balls) {
     if (!Object.keys(bats).includes(ball.batsmanName)) {
       bats[ball.batsmanName] = {}
     }
     if (!Object.keys(bats[ball.batsmanName]).includes(ball.bowlerName)) {
       bats[ball.batsmanName][ball.bowlerName] = 0
     }
-    if (ball.code)
-    bats[ball.batsmanName][ball.bowlerName] += ball.score
+    if (ball.code) {
+      bats[ball.batsmanName][ball.bowlerName] += ball.score
+    }
   }
 
   console.log(bats)
-};
+}
 
 export const getBatsmanBalls = async (matchId: string, batsman: string) => {
-  let balls = await processMatch(matchId);
-  const runs = balls.filter(b => b.batsmanName === batsman)
-    .filter(b => !b.code.endsWith('w'))
-    .map(b => {
+  const balls = await processMatch(matchId)
+  const runs = balls
+    .filter((b) => b.batsmanName === batsman)
+    .filter((b) => !b.code.endsWith('w'))
+    .map((b) => {
       // @ts-ignore
       if (isNaN(b.code)) {
         return 0
@@ -70,14 +72,14 @@ export const getBatsmanBalls = async (matchId: string, batsman: string) => {
   //   .map(b => (parseFloat(b.requiredRunRate) / 6) * 100)
 
   // console.log(rrr.length)
-  console.log(runs.join(","))
-};
-
-export const getBallsData = async (matchId: string) => {
-  let balls = await processMatch(matchId);
-  fs.writeFileSync(`./data/balls_${matchId}.json`, JSON.stringify(balls));
+  console.log(runs.join(','))
 }
 
-//getBatsmanBalls("1144528", "MS Dhoni")
+export const getBallsData = async (matchId: string) => {
+  const balls = await processMatch(matchId)
+  fs.writeFileSync(`./data/balls_${matchId}.json`, JSON.stringify(balls))
+}
 
-getBallsData('1144528');
+// getBatsmanBalls("1144528", "MS Dhoni")
+
+getBallsData('1144528')
